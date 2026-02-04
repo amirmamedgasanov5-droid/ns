@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="az">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Nesihetler medresesi| İslami Platforma</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <style>
+       @import url('https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400;1,700&family=Plus+Jakarta+Sans:wght@300;400;600;800&family=Scheherazade+New:wght@400;700&display=swap');
+
+
+        :root {
+            --bg: #F9F7F2;
+            --accent: #C5A059;
+            --deep: #1A1412;
+            --white: #FFFFFF;
+        }
+
+    body {
+    font-family: 'Manrope', sans-serif;
+    background-color: var(--bg);
+    color: var(--deep);
+    user-select: none;
+    overflow-x: hidden;
+}
+
+                                                             
+          
+        .arabic { 
+    font-family: 'Amiri', serif; 
+    line-height: 1.6; /* Для этого шрифта лучше чуть увеличить отступ */
+}
+
+
+        /* Tablet & Desktop Sidebar Logic */
+        @media (min-width: 1024px) {
+            .sidebar { width: 320px; position: fixed; height: 100vh; }
+            .content-area { margin-left: 320px; }
+        }
+
+        /* Apple-Style Bento Cards */
+        .n-card {
+            background: var(--white);
+            border-radius: 35px;
+            border: 1px solid rgba(197, 160, 89, 0.1);
+            box-shadow: 0 15px 40px -10px rgba(26, 20, 18, 0.05);
+            transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .n-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 30px 60px -15px rgba(26, 20, 18, 0.1);
+        }
+
+        /* Smooth View Switching */
+        .view-section { display: none; }
+        .view-section.active { display: block; animation: reveal 0.6s ease forwards; }
+
+        @keyframes reveal {
+            from { opacity: 0; transform: translateY(15px); filter: blur(10px); }
+            to { opacity: 1; transform: translateY(0); filter: blur(0); }
+        }
+
+        .nav-link { color: #D1D1D1; transition: 0.3s; }
+        .nav-link.active { color: var(--accent); }
+
+        ::-webkit-scrollbar { width: 0px; }
+        
+        /* Təsbeh Progress */
+        .progress-ring { transition: stroke-dashoffset 0.4s; }
+    </style>
+</head>
+<body class="pb-24 lg:pb-0">
+
+    <aside class="sidebar hidden lg:flex flex-col bg-white border-r border-stone-100 p-10 z-50">
+        <div class="mb-12">
+            <h1 class="text-3xl font-Black ita tracking-tighter uppercase">N-M<span class="text-accent">.</span></h1>
+            <p class="text-[9px] font-bold text-stone-300 uppercase tracking-[0.4em] mt-1">Həqiqət Yolu</p>
+        </div>
+        
+        <nav class="space-y-4 flex-1">
+            <button onclick="app.nav('home')" class="w-full flex items-center gap-4 p-4 rounded-2xl font-bold hover:bg-stone-50 transition-all">
+                <i class="fa-solid fa-house-chimney text-accent"></i> Ana Səhifə
+            </button>
+            <button onclick="app.nav('lib')" class="w-full flex items-center gap-4 p-4 rounded-2xl font-bold hover:bg-stone-50 transition-all">
+                <i class="fa-solid fa-book-quran text-accent"></i> Kitabxana
+            </button>
+            <button onclick="app.nav('names')" class="w-full flex items-center gap-4 p-4 rounded-2xl font-bold hover:bg-stone-50 transition-all">
+                <i class="fa-solid fa-star-and-crescent text-accent"></i> 99 Ad
+            </button>
+            <button onclick="app.nav('zikr')" class="w-full flex items-center gap-4 p-4 rounded-2xl font-bold hover:bg-stone-50 transition-all">
+                <i class="fa-solid fa-fingerprint text-accent"></i> Təsbeh
+            </button>
+        </nav>
+
+        <div class="mt-auto p-6 bg-stone-50 rounded-[30px] border border-stone-100">
+            <p class="text-[9px] font-black text-accent uppercase tracking-widest mb-2">Hicri</p>
+            <p id="h-date-side" class="text-xs font-bold arabic italic">...</p>
+        </div>
+    </aside>
+
+    <main class="content-area min-h-screen p-6 md:p-12 lg:p-16">
+        
+        <header class="flex justify-between items-end mb-12">
+            <div>
+                <span id="top-date" class="text-[10px] font-black uppercase tracking-[0.5em] text-accent mb-2 block">---</span>
+<h2 id="view-title" class="text-4xl md:text-5xl font-black font-mono tracking-tighter leading-none">
+    NESIHETLER<br>MEDRESESI 
+</h2>
+
+            </div>
+            <div id="prayer-compact" class="hidden md:block text-right">
+                <p class="text-[9px] font-black text-stone-300 uppercase tracking-widest">Növbəti Namaz</p>
+                <p id="next-prayer-time" class="text-xl font-black italic">--:--</p>
+            </div>
+        </header>
+
+        <div id="views">
+            
+            <section id="view-home" class="view-section active">
+                <div onclick="app.nav('lib')" class="n-card p-10 mb-8 bg-stone-900 text-white relative overflow-hidden group cursor-pointer border-none shadow-2xl">
+                    <div class="absolute -right-16 -bottom-16 opacity-10 text-[250px] arabic select-none group-hover:scale-110 transition-transform duration-1000">الله</div>
+                    <div class="relative z-10">
+                        <span class="px-4 py-1 rounded-full border border-white/20 text-[9px] font-black uppercase tracking-widest mb-6 inline-block bg-white/5">Öyrən</span>
+                        <h3 class="text-3xl md:text-5xl font-black mb-4 leading-tight tracking-tighter italic">İslam Nədir?</h3>
+                        <p class="text-white/50 text-sm md:text-base max-w-md font-medium mb-8">İman, Namaz, Zəkat və digər fundamental biliklər üçün kitabxanaya daxil olun.</p>
+                        <div class="flex items-center gap-3 text-accent font-black text-[10px] tracking-widest">DAXİL OL <i class="fa-solid fa-arrow-right"></i></div>
+                    </div>
+                </div>
+
+                <div class="n-card p-8 mb-8">
+                    <div class="flex justify-between items-center mb-8">
+                        <h4 class="text-xl font-black tracking-tighter italic">Bakı Namaz Vaxtları</h4>
+                        <span class="text-[10px] font-bold text-stone-300 uppercase tracking-widest">Canlı 2026</span>
+                    </div>
+                    <div id="prayer-grid" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+                        </div>
+                </div>
+            </section>
+
+            <section id="view-lib" class="view-section">
+                <div id="lib-grid" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    </div>
+            </section>
+
+            <section id="view-names" class="view-section">
+                <div id="names-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                    </div>
+            </section>
+
+            <section id="view-zikr" class="view-section">
+                <div class="flex flex-col items-center justify-center min-h-[50vh]">
+                    <div class="relative w-72 h-72 flex items-center justify-center mb-12">
+                        <svg class="absolute inset-0 w-full h-full -rotate-90">
+                            <circle cx="50%" cy="50%" r="45%" stroke="#F1EFEA" stroke-width="4" fill="transparent" />
+                            <circle id="z-circle" class="progress-ring" cx="50%" cy="50%" r="45%" stroke="#C5A059" stroke-width="10" fill="transparent" stroke-dasharray="1000" stroke-dashoffset="1000" stroke-linecap="round" />
+                        </svg>
+                        <div onclick="app.doZikr()" class="w-56 h-56 rounded-full bg-white n-card flex flex-col items-center justify-center cursor-pointer active:scale-95 border-none shadow-xl z-10">
+                            <span id="z-count" class="text-7xl font-black">0</span>
+                            <span class="text-accent font-black text-[9px] tracking-[0.4em] uppercase">Toxun</span>
+                        </div>
+                    </div>
+                    <h3 id="z-name" class="text-3xl font-black italic mb-2 tracking-tighter">Sübhanallah</h3>
+                    <p id="z-total" class="text-stone-300 font-bold uppercase text-[9px] tracking-widest">Ümumi: 0</p>
+                    <button onclick="app.resetZikr()" class="mt-12 text-stone-300 font-black text-[9px] uppercase tracking-widest hover:text-red-400">Sıfırla</button>
+                </div>
+            </section>
+
+            <section id="view-reader" class="view-section">
+                <button onclick="app.nav('lib')" class="mb-10 flex items-center gap-2 text-stone-400 font-black text-[10px] uppercase tracking-widest"><i class="fa-solid fa-arrow-left"></i> Geri</button>
+                <div class="max-w-2xl mx-auto">
+                    <h1 id="r-title" class="text-4xl md:text-6xl font-black italic mb-10 tracking-tighter">...</h1>
+                    <div id="r-body" class="text-lg leading-[2] text-stone-600 space-y-6"></div>
+                </div>
+            </section>
+
+        </div>
+    </main>
+
+    <nav class="fixed bottom-0 left-0 w-full bg-white/90 backdrop-blur-xl border-t border-stone-100 lg:hidden flex justify-around p-6 z-50 rounded-t-[40px] shadow-2xl">
+        <button onclick="app.nav('home')" id="m-home" class="nav-link active text-xl"><i class="fa-solid fa-house"></i></button>
+        <button onclick="app.nav('lib')" id="m-lib" class="nav-link text-xl"><i class="fa-solid fa-book-open"></i></button>
+        <button onclick="app.nav('names')" id="m-names" class="nav-link text-xl"><i class="fa-solid fa-star-and-crescent"></i></button>
+        <button onclick="app.nav('zikr')" id="m-zikr" class="nav-link text-xl"><i class="fa-solid fa-fingerprint"></i></button>
+    </nav>
+
+    <script>
+        const app = {
+            // DATA (10,000 sətirə namizəd baza)
+ db: {
+    lib: [
+        {
+            id: 'islam-nedir',
+            title: 'İslam Nədir?',
+            cat: 'Əsaslar',
+            content: '<p>Ömər ibn Xəttab demişdir: Bir dəfə biz Peyğəmbərin yanında oturmuşduq. Birdən ağappaq paltarlı, zil qara saçlı, üst-başında da səfərdən bir əsər-əlamət görünməyən və heç birimizin tanımadığı bir adam yanımıza gəldi. Nəhayət, o yaxınlaşıb Peyğəmbərlə üzbəüz oturdu, dizlərini onun dizlərinə dayadı, əllərini də öz budunun üstünə qoyub dedi: Ey Muhəmməd, mənə İslam haqqında xəbər ver! Peyğəmbər buyurdu: İslam odur ki, Allahdan başqa ibadət haqqına malik heç bir tanrının olmadığına və Muhəmmədin Onun elçisi olduğuna şəhadət gətirəsən, namaz qılasan, zəkat verəsən, ramazan ayını oruc tutasan və imkanın olduğu təqdirdə Kəbəni ziyarət edəsən. Adam: Doğru söylədin!– dedi. Biz ona təəccüb etdik, o həm soruşur, həm də təsdiq edirdi. Sonra o dedi: Mənə iman haqqında xəbər ver. Peyğəmbər buyurdu: İman odur ki, Allaha, Onun mələklərinə, kitablarına, elçilərinə və Axirət gününə iman gətirəsən, habelə qədərə – onun xeyrinə və şərinə iman gətirəsən. Adam: Doğru söylədin!– dedi. Sonra soruşdu: Mənə ehsan haqqında xəbər ver. Peyğəmbər buyurdu: Ehsan odur ki, Allaha, sanki Onu görürmüşsən kimi ibadət edəsən. Sən Onu görməsən də, bil ki, O səni görür. Adam soruşdu: Mənə Qiyamət saatı haqqında xəbər ver. Peyğəmbər buyurdu: Bu haqda soruşulan soruşandan çox bilmir. Adam soruşdu: Mənə onun əlamətləri haqqında xəbər ver. Peyğəmbər buyurdu: O vaxt ki, cariyə öz ağasını dünyaya gətirəcək və sən ayaqyalın, çılpaq və kasıb çobanların hündür binalar tikməkdə yarışdıqlarını görəcəksən. Ömər dedi: Sonra o çıxıb getdi. Mən bir müddət yerimdəcə donub qaldım. Sonra Peyğəmbər məndən soruşdu: Ey Ömər, sual verənin kim olduğunu bilirsənmi? Mən: Allah və Onun rəsulu daha yaxşı bilir!– dedim. Peyğəmbər buyurdu: O, Cəbrail idi. Sizə dininizi öyrətməyə gəlmişdi.</p>'
+        },
+        {
+            id: 'sehadet',
+            title: 'Şəhadət',
+            cat: 'Əsaslar',
+            content: '<p>Peyğəmbər - ona və ailəsinə Allahın salavatı və salamı olsun - demişdir: İslam beş əsas üzərində qurulmuşdur: Allahdan başqa həqiqi tanrının olmadığına və Məhəmmədin Allahın elçisi olmasına şəhadət gətirmək, namaz qılmaq, zəkat vermək, Allahın Evini həcc etmək və Ramazan ayını oruc tutmaq. Bu hədisdə Peyğəmbər İslamın əsaslarını möhkəm təməl üzərində qurulan binaya bənzətmişdir. Bina təməl və sütunlar üzərində qurulduğu kimi İslam dini də bu beş təməl üzərində qurulmuşdur. Bu təməllərin ən əsası isə Allahdan başqa həqiqi tanrı yoxdur və Muhəmməd onun elçisidir (Lə iləhə illallah və Muhəmmədən rəsulullah) şəhadət kəlməsidir. Çünki şəhadət yerinə yetirilmədən digər heç bir əməl qəbul olunmaz. Lə iləhə illallah - Allahdan başqa həqiqi tanrı yoxdur şəhadəti imanın bütün mənalarını özündə cəm edir. Bu kəlmənin mənası Allahdan başqa ibadət edilməyə layiq olan heç bir tanrı yoxdur deməkdir. Bəzi adamlar bunu Allahdan başqa Allah yoxdur kimi tərcümə edirlər, lakin bu doğru deyildir. Əgər belə olsaydı, Qureyş qəbiləsindən olan Məkkə müşrikləri bu kəlməni qəbul edər və ona qarşı mübarizə aparmazdılar. Çünki onlar Allahı göyləri və yeri yaradan Rəbb olmasına iman gətirirdilər. Onlar dua, nəzir, qurban, həcc kimi ibadətləri yerinə yetirir, lakin bu ibadətləri Allahla yanaşı bütləri də həsr edir və bütləri Allahla öz aralarında ibadətdə vasitəçi olaraq qəbul edirdilər. Ona görə də sadəcə Allahın varlığını qəbul etmək iman gətirmək üçün kifayət deyildir. İndiki dövrdə insanların əksəriyyəti elə bilir ki, təkcə Allahın varlığına inanmaq mömin olmaq üçün onlara kifayət edir. Əgər belə olsaydı, yuxarıda qeyd etdiyimiz kimi Məkkə müşrikləri əsl mömin sayılardılar. Halbuki Allah onların ibadətlərini inkar etmiş və Ona şərik qoşduqlarına görə onlara Cəhənnəm əzabını vəd etmişdir. Lə iləhə illallah kəlməsi iki əsasdan ibarətdir. Birinci: Allahdan başqasının həqiqi tanrı olmasını inkar edən Lə iləhə kəlməsi. İkinci: Yalnız Allahın həqiqi tanrı olmasını təsdiq edən İlləllah kəlməsi. Bu kəlmə inkardan və təsdiqdən ibarətdir. İnsan lə iləhə deməklə bütün tanrıların batil olduğunu, ibadətə layiq olmadığını bəyan edir, illəllah deməklə də yalnız Allahın həqiqi tanrı olduğunu və yalnız Onun ibadətə layiq olduğunu təsdiq edir. Bu kəlmə Allahdan başqasının ilahi keyfiyyətlərinə sahib olmasını inkar edir və yalnız Allahın yeganə ilahi varlıq olduğunu təsdiq edir. Uca Allah buyurur: Bil ki, Allahdan başqa ibadətə layiq olan heç bir tanrı yoxdur (Muhəmməd, 19). Peyğəmbər demişdir: Kim səmimi qəlbdən LƏ İLƏHƏ İLLALLAH deyərsə, Cənnətə girər. Yəni kim bu kəlmənin mənasını bilər, onu qəlbi ilə təsdiq edər və ona əməl edərsə, Cənnətə daxil olar. Bu kəlməni deyən Allahdan başqasına ibadət etməməli, namaz, oruc, həcc, qurban, dua, nəzir və s. kimi ibadətlərin bütün növlərini yalnız Allaha həsr etməli və yalnız Onun razılığını qazanmaq üçün yerinə yetirməlidir. İlah sözünün mənası ibadət edilən tanrı deməkdir. İlah insanların ibadət etdiyi, qorxub təzim etdiyidir. Onu sevir, ona ümid edir və ona bel bağlayırlar və ondan diləyirlər. Bütün bunlara haqqı olan ilah yalnız Allahdır. Əgər kimsə bu ibadətlərin bircə növünü belə Allahdan qeyrisinə həsr edərsə, onu özünə ilah, tanrı etmiş sayılır və o kimsə LƏ İLƏHƏ İLLALLAH kəlməsini söyləmiş olsa da öz etiqadını korlamışdır. MUHƏMMƏDƏN RASULULLAH – Muhəmməd Allahın elçisidir kəlməsi Muhəmmədin Allahın peyğəmbəri, Onun bütün insanlara göndərdiyi elçi olmasını təsdiq etmək, həmçinin onun Allahdan verdiyi xəbərləri qəbul etmək və onun buyurduğu kimi Allaha ibadət etməkdir. Uca Allah buyurur: Peyğəmbər sizə nə verirsə, onu götürün, nəyi də qadağan edirsə, ondan çəkinin (əl-Həşr surəsi, 7). Həmçinin buyurur: De: Əgər siz Allahı sevirsinizsə, mənim ardımca gəlin ki, Allah da sizi sevsin və günahlarınızı bağışlasın. Allah Bağışlayandır, Rəhmlidir (Ali İmran, 31).</p>'
+        },
+        {
+            id: 'namaz',
+            title: 'Namaz',
+            cat: 'Əsaslar',
+            content: '<p>Namaz İslamın beş əsasından ikincisidir. Hər bir ağıl sahibi, bülğ yaşına çatmış müsəlman üzərinə farzdır. Namazın hikməti Allahla bir bağ yaratmaq, Onu hər an xatırlamaq və Onun qarşısında zəlil və aciz olduğumuzu etiraf etməkdir. Namaz dinin dirəyidir. Namazı tərk edən dinini uçuruma sürükləmiş olur. Namaz günahdan saxlayan bir qalxandır. Peyğəmbərimiz (s) buyurur: "Sizdən birinizin qapısının qabağında bir çay axsa və hər gün beş dəfə onda çimməsi lazım gəlsə, onun üzərində heç bir kir qalar?" Səhabələr: "Xeyr, heç bir kir qalmaz!"– deyə cavab verdilər. Peyğəmbər buyurdu: "Beş vaxt namaz da belədir. Allah bu namazlar sayəsində günahları silər." (Buxari, Müslim). Namazın vaxtları Quranda müəyyən edilmişdir: "Həqiqətən, namaz möminlər üzərinə vaxtlı-vaxtına farz edilmişdir." (Nisa, 103). Sabah namazı: Səhər açılarkən, günəş doğmamışdan əvvəl. Günorta namazı: Günəş zəvəldən qərbə meyl etdikdə. İkindi namazı: Hər şeyin kölgəsi öz uzunluğunun iki qatına çatdıqda. Axşam namazı: Günəş batdıqdan dərhal sonra. Yatsı namazı: Axşam qaranlığı tam yayıldıqda. Namazı qılmazdan əvvəl təmizlik (təhərət) şərtdir. Bu, bədənin, paltarın və namaz qılınan yerin təmiz olması, həmçinin ab-dəst (təhərət almaq) və ya qüsurlu hallarda qüsü ab-dəsti almaqdır. Namazın şərtləri: 1. Təhərət, 2. Avrətin örtülməsi, 3. Qibləyə üz tutmaq, 4. Namazın vaxtının daxil olması, 5. Niyyət. Namazın rüknləri isə: 1. Qiyam (ayaqda durmaq), 2. Qiraət (Fatiə və ya qısa surə oxumaq), 3. Rüku, 4. Səcdə, 5. Qəde-axirədə oturmaq. Namazda təmiz və üzləri örtülü olmaq, narahat olmamaq, Allahın əzəmətini düşünmək (huşu) məqsədyönlüdür.</p>'
+        },
+        {
+            id: 'zekat',
+            title: 'Zəkat',
+            cat: 'Əsaslar',
+            content: '<p>Zəkat İslamın beş əsasından üçüncüsüdür. Maliyyə ibadəti olaraq, Allahın verdiyi sərvətdən bir hissəni Onun əmri ilə müəyyən edilmiş yoxsullara, ehtiyac sahiblərinə verməkdir. Zəkat sözlük mənasında təmizlənmək, artmaq deməkdir. Zəkat malı təmizləyir, onu bəreyətdən qoruyur və malın berekətini artırır. Uca Allah buyurur: "Onların mallarından, onları təmizləyəcək və artıracaq bir sədəqə (zəkat) al." (Tövbe, 103). Zəkat vermək hər sərvət sahibi müsəlman üçün farzdır. Nisab (zəkatın vacib olduğu ən aşağı hədd) qızılda 85 qram, gümüşdə 595 qram və ya bu dəyərdə pul və ya ticarət mallarıdır. Nisab həddinə çatan mal üzərindən bir il (hicri il) keçdikdə, onun 40-da 1-i (yəni 2,5%) zəkat olaraq verilir. Zəkat veriləcək şəxslər Quranda müəyyən edilmişdir: "Sədəqələr (zəkat) yalnız kasıblar, miskinlər, onun üzərində çalışanlar (zəkat toplayanlar), qəlbləri İslama isinəcək olanlar, kölə azad etmək, borclular, Allah yolunda və müəssirdə (yolçu) qalmışlar üçündür. Allah bunu farz etmişdir. Allah hər şeyi biləndir, hikmət sahibidir." (Tövbe, 60). Zəkat bir ibadət olduğu üçün yalnız Allahın rəzası üçün, riyakarlıqdan uzaq şəkildə verilməlidir. Zəkati gizli vermək daha əfzəldir, lakin açıq vermək də caizdir. Zəkat həm də cəmiyyətdə sosial ədaləti təmin edir, varla yoxsul arasında məhəbbət körpüsü yaradır.</p>'
+        },
+        {
+            id: 'oruc',
+            title: 'Oruc',
+            cat: 'Əsaslar',
+            content: '<p>Oruc İslamın beş əsasından dördüncüsüdür. Hicri təqvimin 9-cu ayı olan Ramazan ayında, səhərdən (imsak) axşama (günəş batana) qədər yeməkdən, içməkdən və şəhvani hisslərdən uzaq durmaqdır. Orucun məqsədi nəfsi tərbiyə etmək, Allaha itaəti gücləndirmək, yoxsulların həyatını düşünmək və takvanı artırmaqdır. Uca Allah buyurur: "Ey iman gətirənlər! Sizdən əvvəlkilərə yazıldığı kimi, sizin üzərinizə də oruc yazıldı (farz edildi). Bəlkə, Allahdan qorxasınız." (Bəqərə, 183). Oruc yalnız bədənlə məhdudlaşmır, həm də dilin, gözlərin, qulaqların və digər üzvlərin günahlardan saxlanmasıdır. Peyğəmbərimiz (s) buyurur: "Kim yalan danışmağı və yalanla iş görməyi tərk etməsə, onun yeməyi-içməyi tərk etməsinə Allahın ehtiyacı yoxdur." (Buxari). Ramazan ayı Qurani-Kərimin nazil olmağa başladığı aydır. Bu ayda Cənnət qapıları açılır, Cəhənnəm qapıları bağlanır və şeytanlar zincirlənir. Həmin ayda edilən ibadətlərin, xeyirxah əməllərin savabı başqa aylardan daha çoxdur. Orucu pozan şeylər: Qəsdən yemək-içmək, cinsi əlaqə, qəsdən qusmaq, menstruasiya və loğusalıq halları. Qəsdən orucu pozanlar üçün kəffarə (60 gün ard-arda oruc tutmaq) və ya fidye (bir yoxsulu doyurmaq) təyin edilmişdir. Orucun müstəhəb növləri də var: Şevval ayında 6 gün oruc, hər ayın 13, 14, 15-ci günləri (eyyam-ı bəyd), bazar ertəsi və cümə axşamı orucları. Xəstəlik, səfər, hamiləlik və ya uşağına süd vermək kimi bir səbəblə oruc tuta bilməyənlər, sonradan qəza edirlər.</p>'
+        },
+        {
+            id: 'hecc',
+            title: 'Həcc',
+            cat: 'Əsaslar',
+            content: '<p>Həcc İslamın beş əsasından beşincisidir. Hicri təqvimin Zilhiccə ayında, Məkkədəki Kəbəni və müqəddəs yerləri Allahın təyin etdiyi şəkildə ziyarət etməkdir. Həcc hər sağlam, ağıl başında, bülüğ yaşına çatmış, azad və sərvəti kifayət edən hər müsəlman üzərinə ömründə bir dəfə farzdır. Uca Allah buyurur: "Həcc məscidini (Kəbəni) insanlar üçün ziyarətgah etdik. Həcc aylarında özünüzə aid bir qazanc üçün Allahın həram etdiyi heyvanlardan kəsin. ... Həcc əməllərini yerinə yetirin." (Həcc, 27-29). Həccin məqsədi Allahın əmrini yerinə yetirmək, maddi və mənəvi sərvətdən qisməti vermək, bütün müsəlmanların bərabərliyini, vahidliyini və qardaşlığını yaşamaqdır. Həcc zamanı hər kəs eyni ağ geyim (ihram) geyinir, bu da insanlar arasında sinif, irq, millət fərqini silir. Həccin mərhələləri: 1. İhrama girmək (niyyət və təlbiyə), 2. Zilhiccənin 9-u Arafatda vuquf (dayanmaq), 3. Müzdelifədə gecələmək, 4. Mina da şeytan daşlamaq, 5. Heyvan qurban etmək (və ya qurban kəsmək), 6. Kəbəni təvaf etmək, 7. Səfə və Mərvə arasında səy etmək. Həcc zamanı edilən duaların qəbul olunma ehtimalı yüksəkdir. Peyğəmbərimiz (s) buyurur: "Məqsədində xalis olaraq həcc edən kimsə anası onu doğduğu gün kimi günahlarından təmiz olaraq qayıdır." (Buxari, Müslim). Həcc müsəlmanların böyük konqresi, ümətlərin görüş məclisidir.</p>'
+        },
+        {
+            id: 'melek',
+            title: 'Mələklər haqqında',
+            cat: 'İman',
+            content: '<p>Mələklər nurdan yaradılmış varlıqlardır. Onlar Allahın əmrlərindən çıxmazlar.</p>'
+        },
+        {
+            id: 'olum',
+            title: 'Ölüm haqqında',
+            cat: 'Axirət',
+            content: '<p>Hər bir canlı ölümü dadacaqdır. Ölüm bir son deyil, əbədi həyatın başlanğıcıdır.</p>'
+              }             
+                ],
+                names: [
+    {az: "ər-Rahmən", ar: "الرحمن", d: "Dünyada hər bir məxluquna rəhm edən."},
+    {az: "ər-Rahim", ar: "الرحيم", d: "Axirətdə yalnız möminlərə rəhm edən."},
+    {az: "əl-Məlik", ar: "الملك", d: "Bütün kainatın mütləq sahibi."},
+    {az: "əl-Quddus", ar: "القدوس", d: "Hər cür nöqsandan uzaq, pak."},
+    {az: "əs-Salam", ar: "السلام", d: "Emin-amanlıq verən, nöqsanlardan salamat olan."},
+    {az: "əl-Mumin", ar: "المؤمن", d: "Könüllərdə iman işığı yandıran, sığınacaq verən."},
+    {az: "əl-Muhaymin", ar: "المهيمن", d: "Hər şeyi görüb gözləyən, hifz edən."},
+    {az: "əl-Aziz", ar: "العزيز", d: "Məğlubedilməz, hər şeyə qalib gələn."},
+    {az: "əl-Cabbar", ar: "الجبار", d: "İstədiyini məcburi etdirən, qırılanları düzəldən."},
+    {az: "əl-Mutəkəbbir", ar: "المتكبر", d: "Hər şeydə böyüklüyünü göstərən."},
+    {az: "əl-Xaliq", ar: "الخalq", d: "Hər şeyi yoxdan var edən, Yaradan."},
+    {az: "əl-Bari", ar: "البارئ", d: "Hər şeyi qüsursuz və mütənasib yaradan."},
+    {az: "əl-Musavvir", ar: "المصور", d: "Varlıqlara surət və forma verən."},
+    {az: "əl-Qaffar", ar: "الغفار", d: "Günahları çox bağışlayan."},
+    {az: "əl-Qahhar", ar: "القهار", d: "Hər şeyə qalib gələn, hər şeyi tabe edən."},
+    {az: "əl-Vahhab", ar: "الوهاب", d: "Qarşılıqsız nemət verən."},
+    {az: "ər-Razzaq", ar: "الرزاق", d: "Hər bir canlının ruzisini verən."},
+    {az: "əl-Fəttah", ar: "الفتاح", d: "Xeyir qapılarını açan, çətinlikləri həll edən."},
+    {az: "əl-Alim", ar: "العليم", d: "Hər şeyi ən xırda detalına qədər bilən."},
+    {az: "əl-Qabid", ar: "القابض", d: "Ruzini sıxan, canları alan."},
+    {az: "əl-Basit", ar: "الباسط", d: "Ruzini bol edən, qəlbləri açan."},
+    {az: "əl-Xafid", ar: "الخافض", d: "Kafirləri alçaldan."},
+    {az: "ər-Rafi", ar: "الرافع", d: "Möminləri ucaldan."},
+    {az: "əl-Muizz", ar: "المعز", d: "İzzət verən, əziz edən."},
+    {az: "əl-Muzill", ar: "المذل", d: "Zəlil edən, rüsvay edən."},
+    {az: "əs-Səmi", ar: "السميع", d: "Hər şeyi eşidən."},
+    {az: "əl-Basir", ar: "البصير", d: "Hər şeyi görən."},
+    {az: "əl-Həkəm", ar: "الحكم", d: "Mütləq hökm sahibi."},
+    {az: "əl-Adl", ar: "العدل", d: "Tam ədalətli olan."},
+    {az: "əl-Lətif", ar: "اللطيف", d: "Lütfkar, hər şeyin incəliyinə bələd olan."},
+    {az: "əl-Xabir", ar: "الخبير", d: "Hər şeydən xəbərdar olan."},
+    {az: "əl-Həlim", ar: "الحليم", d: "Cəza verməyə tələsməyən, mülayim."},
+    {az: "əl-Azim", ar: "العظيم", d: "Zatı və sifətləri ilə çox uca olan."},
+    {az: "əl-Qafur", ar: "الغفور", d: "Bağışlayan, əfv edən."},
+    {az: "əş-Şəkur", ar: "الشكور", d: "Az əmələ çox mükafat verən."},
+    {az: "əl-Aliyy", ar: "العلي", d: "Hər şeydən uca olan."},
+    {az: "əl-Kəbir", ar: "الكبير", d: "Mütləq böyük."},
+    {az: "əl-Hafiz", ar: "الحفيظ", d: "Qoruyan, hifz edən."},
+    {az: "əl-Muqit", ar: "المقيت", d: "Maddi və mənəvi ruzi verən."},
+    {az: "əl-Hasib", ar: "الحسيب", d: "Kifayət edən, hesaba çəkən."},
+    {az: "əl-Cəlil", ar: "الجليل", d: "Əzəmətli, uca."},
+    {az: "əl-Kərim", ar: "الكريم", d: "Çox səxavətli, kərəmli."},
+    {az: "ər-Raqib", ar: "الرقيب", d: "Nəzarət edən, hər an görən."},
+    {az: "əl-Mucib", ar: "المجيب", d: "Duaları qəbul edən."},
+    {az: "əl-Vasi", ar: "الواسع", d: "Elmi və rəhməti hər şeyi əhatə edən."},
+    {az: "əl-Həkim", ar: "الحكيم", d: "Hər işi hikmətli olan."},
+    {az: "əl-Vədud", ar: "الودود", d: "Bəndələrini çox sevən."},
+    {az: "əl-Məcid", ar: "المجيد", d: "Şanı uca və yüksək olan."},
+    {az: "əl-Baith", ar: "الباعث", d: "Ölənləri dirildən."},
+    {az: "əş-Şəhid", ar: "الشهيد", d: "Hər şeyə şahid olan."},
+    {az: "əl-Haqq", ar: "الحق", d: "Varlığı dəyişməyən, həqiqi varlıq."},
+    {az: "əl-Vəkil", ar: "الوكيل", d: "Güvənilən, işləri yoluna qoyan."},
+    {az: "əl-Qaviyy", ar: "القوي", d: "Çox qüdrətli, güclü."},
+    {az: "əl-Mətin", ar: "المتين", d: "Sarsılmaz, möhkəm."},
+    {az: "əl-Vəliyy", ar: "الولي", d: "Dost, kömək edən."},
+    {az: "əl-Hamid", ar: "الحميد", d: "Tərifə layiq olan."},
+    {az: "əl-Muhsi", ar: "المحصي", d: "Hər şeyi sayan, qeydə alan."},
+    {az: "əl-Mubdi", ar: "المبدئ", d: "Varlıqları ilk dəfə yaradan."},
+    {az: "əl-Muid", ar: "المعيد", d: "Öldürən və yenidən dirildən."},
+    {az: "əl-Muhyi", ar: "المحيي", d: "Həyat verən, canlandıran."},
+    {az: "əl-Mumit", ar: "المميت", d: "Ölümü yaradan."},
+    {az: "əl-Hayy", ar: "الحي", d: "Əbədi diri olan."},
+    {az: "əl-Qayyum", ar: "القيوم", d: "Varlıqları ayaqda tutan."},
+    {az: "əl-Vacid", ar: "الواجد", d: "İstədiyini istədiyi an tapan."},
+    {az: "əl-Macid", ar: "الماجد", d: "Kərəm və ehsanı bol olan."},
+    {az: "əl-Vahid", ar: "الواحد", d: "Zatında tək olan."},
+    {az: "əl-Ahad", ar: "الأحد", d: "Bənzərsiz, tək."},
+    {az: "əs-Saməd", ar: "الصمد", d: "Heç nəyə ehtiyacı olmayan."},
+    {az: "əl-Qadir", ar: "القادر", d: "İstədiyini etməyə gücü çatən."},
+    {az: "əl-Muqtədir", ar: "المقتدر", d: "Hər şeyə qadir olan."},
+    {az: "əl-Muqaddim", ar: "المقدم", d: "İstədiyini önə keçirən."},
+    {az: "əl-Muaxir", ar: "المؤخر", d: "İstədiyini geriyə qoyan."},
+    {az: "əl-Əvvəl", ar: "الأول", d: "Başlanğıcı olmayan."},
+    {az: "əl-Axir", ar: "الآخر", d: "Sonu olmayan."},
+    {az: "əz-Zahir", ar: "الظاهر", d: "Varlığı aşkar olan."},
+    {az: "əl-Batin", ar: "الباطн", d: "Gizli olan, mahiyyəti bilinməyən."},
+    {az: "əl-Vali", ar: "الوالي", d: "Kainatı idarə edən."},
+    {az: "əl-Mutəali", ar: "المتعالي", d: "Ən uca varlıq."},
+    {az: "əl-Bərr", ar: "البر", d: "Yaxşılıq edən, lütfü bol olan."},
+    {az: "ət-Təvvab", ar: "التواب", d: "Tövbələri qəbul edən."},
+    {az: "əl-Muntəqim", ar: "المنتقم", d: "İntiqam alan, cəza verən."},
+    {az: "əl-Afuvv", ar: "العفو", d: "Bağışlayan, əfv edən."},
+    {az: "ər-Rauf", ar: "الرؤوف", d: "Çox şəfqətli."},
+    {az: "Malikul-Mulk", ar: "مالك الملك", d: "Mülkün mütləq sahibi."},
+    {az: "Zul-Cəlali vəl-İkram", ar: "ذو الجلال والإكرام", d: "Əzəmət və kərəm sahibi."},
+    {az: "əl-Muqsit", ar: "المقسط", d: "Ədalətlə hökm edən."},
+    {az: "əl-Cami", ar: "الجامع", d: "İstədiyini istədiyi vaxt toplayan."},
+    {az: "əl-Qaniyy", ar: "الغني", d: "Zəngin, ehtiyacı olmayan."},
+    {az: "əl-Muqni", ar: "المغني", d: "Zəngin edən."},
+    {az: "əl-Mani", ar: "المانع", d: "İstəmədiyinin qarşısını alan."},
+    {az: "əd-Darr", ar: "الضار", d: "Zərər verənləri yaradan."},
+    {az: "ən-Nafi", ar: "النافع", d: "Xeyir və mənfəət verən."},
+    {az: "ən-Nur", ar: "النور", d: "Nurlandıran, nur mənbəyi."},
+    {az: "əl-Hadi", ar: "الهادي", d: "Hidayət verən."},
+    {az: "əl-Bədi", ar: "البديع", d: "Bənzərsiz yaradan."},
+    {az: "əl-Baqi", ar: "الباقي", d: "Əbədi olan."},
+    {az: "əl-Varis", ar: "الوارث", d: "Hər şeyin həqiqi varisi."},
+    {az: "ər-Rəşid", ar: "الرشيد", d: "Doğru yolu göstərən."},
+    {az: "əs-Sabur", ar: "الصبور", d: "Çox səbirli olan."}
+]
+
+                    
+               
+            },
+
+            state: { count: 0, total: 0, index: 0, titles: ["Sübhanallah", "Əlhəmdulillah", "Allahu Əkbər"] },
+
+            init() {
+                this.updateDates();
+                this.getPrayers();
+                this.renderLib();
+                this.renderNames();
+                setInterval(() => this.updateDates(), 60000);
+            },
+
+            nav(id) {
+                document.querySelectorAll('.view-section').forEach(v => v.classList.remove('active'));
+                document.getElementById('view-' + id).classList.add('active');
+                
+                document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+                if(document.getElementById('m-' + id)) document.getElementById('m-' + id).classList.add('active');
+                
+                const titles = {home: 'Nesihet', lib: 'Kitabxana', names: '99 Ad', zikr: 'Təsbeh', reader: 'Məqalə'};
+                document.getElementById('view-title').innerText = titles[id] || 'Nesihet';
+                window.scrollTo({top: 0, behavior: 'smooth'});
+            },
+
+            read(id) {
+                const item = this.db.lib.find(i => i.id === id);
+                document.getElementById('r-title').innerText = item.title;
+                document.getElementById('r-body').innerHTML = item.content;
+                this.nav('reader');
+            },
+
+            renderLib() {
+                document.getElementById('lib-grid').innerHTML = this.db.lib.map(i => `
+                    <div onclick="app.read('${i.id}')" class="n-card p-8 cursor-pointer flex justify-between items-center group">
+                        <div>
+                            <span class="text-[9px] font-black uppercase text-accent tracking-widest">${i.cat}</span>
+                            <h4 class="text-xl font-bold tracking-tight mt-1 group-hover:text-accent transition-colors">${i.title}</h4>
+                        </div>
+                        <i class="fa-solid fa-chevron-right text-stone-200 group-hover:text-accent transition-all"></i>
+                    </div>
+                `).join('');
+            },
+
+            renderNames() {
+                document.getElementById('names-grid').innerHTML = this.db.names.map((n, idx) => `
+                    <div class="n-card p-8 group hover:bg-stone-900 transition-all duration-700">
+                        <div class="flex justify-between items-start mb-6">
+                            <span class="text-2xl font-black text-stone-100 italic">${idx+1}</span>
+                            <span class="arabic text-4xl text-accent group-hover:scale-110 transition-transform">${n.ar}</span>
+                        </div>
+                        <h4 class="text-xl font-black group-hover:text-white transition-colors">${n.az}</h4>
+                        <p class="text-xs text-stone-400 mt-2 font-medium group-hover:text-white/40">${n.d}</p>
+                    </div>
+                `).join('');
+            },
+
+            doZikr() {
+                this.state.count++;
+                this.state.total++;
+                if(this.state.count >= 33) {
+                    this.state.count = 0;
+                    this.state.index = (this.state.index + 1) % this.state.titles.length;
+                    if(navigator.vibrate) navigator.vibrate([100, 50, 100]);
+                } else if(navigator.vibrate) navigator.vibrate(50);
+                this.updateZikr();
+            },
+
+            resetZikr() { this.state.count = 0; this.state.total = 0; this.state.index = 0; this.updateZikr(); },
+
+            updateZikr() {
+                document.getElementById('z-count').innerText = this.state.count;
+                document.getElementById('z-total').innerText = "Ümumi: " + this.state.total;
+                document.getElementById('z-name').innerText = this.state.titles[this.state.index];
+                const circle = document.getElementById('z-circle');
+                const offset = 1000 - (this.state.count / 33) * 1000;
+                circle.style.strokeDashoffset = offset;
+            },
+
+            async getPrayers() {
+                try {
+                    const res = await fetch('https://api.aladhan.com/v1/timingsByCity?city=Baku&country=Azerbaijan&method=2');
+                    const d = await res.json();
+                    const t = d.data.timings;
+                    const h = d.data.date.hijri;
+                    
+                    document.getElementById('h-date-side').innerText = `${h.day} ${h.month.en} ${h.year}`;
+                    document.getElementById('hijri-date') ? document.getElementById('hijri-date').innerText = h.day + ' ' + h.month.en : null;
+
+                    const list = [
+                        {n: 'Fəcr', v: t.Fajr}, {n: 'Günəş', v: t.Sunrise}, {n: 'Zöhr', v: t.Dhuhr},
+                        {n: 'Əsr', v: t.Asr}, {n: 'Məğrib', v: t.Maghrib}, {n: 'İşa', v: t.Isha}
+                    ];
+
+                    document.getElementById('prayer-grid').innerHTML = list.map(i => `
+                        <div class="text-center p-6 rounded-[30px] bg-stone-50 hover:bg-accent hover:text-white transition-all">
+                            <p class="text-[8px] font-black text-stone-300 uppercase mb-2 group-hover:text-white/50">${i.n}</p>
+                            <p class="text-lg font-black tracking-tighter">${i.v}</p>
+                        </div>
+                    `).join('');
+                } catch(e) { console.error("Prayer Error"); }
+            },
+
+            updateDates() {
+                const now = new Date();
+                document.getElementById('top-date').innerText = now.toLocaleDateString('az-AZ', {day: 'numeric', month: 'long', year: 'numeric'}).toUpperCase();
+            }
+        };
+
+        window.onload = () => app.init();
+    </script>
+</body>
+</html>
